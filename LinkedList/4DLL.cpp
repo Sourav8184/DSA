@@ -2,28 +2,29 @@
 #include <vector>
 using namespace std;
 
-/* ------------------------------------------------ */
+/* ---------------------------------------------------- */
 
 class Node
 {
 public:
     int data;
     Node *next;
-
-    Node(int data, Node *next)
+    Node *prev;
+    Node(int data, Node *next, Node *prev)
     {
         this->data = data;
         this->next = next;
+        this->prev = prev;
     }
-
     Node(int data)
     {
         this->data = data;
         this->next = NULL;
+        this->prev = NULL;
     }
 };
 
-/* ------------------------------------------------ */
+/* ---------------------------------------------------- */
 
 int findLength(Node *head)
 {
@@ -37,7 +38,7 @@ int findLength(Node *head)
     return count;
 }
 
-/* ------------------------------------------------ */
+/* ---------------------------------------------------- */
 
 bool isPresent(int data, Node *head)
 {
@@ -52,43 +53,23 @@ bool isPresent(int data, Node *head)
     }
     return false;
 }
-
-/* ------------------------------------------------ */
+/* ---------------------------------------------------- */
 
 void PrintLL(Node *head)
 {
     Node *temp = head;
     while (temp)
     {
-        cout << temp->data << " -> ";
+        cout << " <- " << temp->data << " -> ";
         temp = temp->next;
     }
     cout << endl;
 }
 
-/* ------------------------------------------------ */
+/* ---------------------------------------------------- */
 
-Node *insertAt_First(int data, Node *head)
+Node *insertAt_First(Node *head, int data)
 {
-    Node *newNode = new Node(data);
-    if (head == NULL)
-    {
-        head = newNode;
-    }
-    else
-    {
-        newNode->next = head;
-        head = newNode;
-    }
-
-    return head;
-}
-
-/* ------------------------------------------------ */
-
-Node *insertAt_Last(int data, Node *head)
-{
-    // return new Node(data, head); this is also work:
     Node *newNode = new Node(data);
     if (head == NULL)
     {
@@ -97,27 +78,48 @@ Node *insertAt_Last(int data, Node *head)
     else
     {
         Node *temp = head;
+        temp->prev = newNode;
+        head = newNode;
+        head->next = temp;
+    }
+    return head;
+}
+
+/* ---------------------------------------------------- */
+
+Node *insertAt_Last(Node *head, int data)
+{
+    Node *newNode = new Node(data);
+    if (head == NULL)
+    {
+        head = newNode;
+    }
+    else
+    {
+
+        Node *temp = head;
         while (temp->next)
         {
             temp = temp->next;
         }
         temp->next = newNode;
+        temp->next->prev = temp;
     }
     return head;
 }
 
-/* ------------------------------------------------ */
+/* ---------------------------------------------------- */
 
-Node *insertKth_Element(int data, Node *head, int k)
+Node *insertKth_Element(Node *head, int data, int k)
 {
     Node *newNode = new Node(data);
     if (k <= 1)
     {
-        return insertAt_First(data, head);
+        return insertAt_First(head, data);
     }
     else if (k > findLength(head))
     {
-        return insertAt_Last(data, head);
+        return insertAt_Last(head, data);
     }
     else
     {
@@ -129,28 +131,31 @@ Node *insertKth_Element(int data, Node *head, int k)
         }
         newNode->next = temp->next;
         temp->next = newNode;
+        temp->next->prev = temp;
+        temp = temp->next;
+        temp->next->prev = temp;
     }
     return head;
 }
 
-/* ------------------------------------------------ */
+/* ---------------------------------------------------- */
 
-Node *insertAt_Mid(int data, Node *head)
+Node *insertAt_Mid(Node *head, int data)
 {
     int l = findLength(head);
     if (l % 2 == 0)
     {
         // even length:
-        return insertKth_Element(data, head, (l / 2) + 1);
+        return insertKth_Element(head, data, (l / 2) + 1);
     }
     else
     {
         // odd length:
-        return insertKth_Element(data, head, (l / 2) + 1);
+        return insertKth_Element(head, data, (l / 2) + 1);
     }
 }
 
-/* ------------------------------------------------ */
+/* ---------------------------------------------------- */
 
 Node *insertAfterK(Node *head, int k, int data)
 {
@@ -163,18 +168,21 @@ Node *insertAfterK(Node *head, int k, int data)
     }
     newNode->next = temp->next;
     temp->next = newNode;
+    temp->next->prev = temp;
+    temp = temp->next;
+    temp->next->prev = temp;
 
     return head;
 }
 
-/* ------------------------------------------------ */
+/* ---------------------------------------------------- */
 
 Node *insertBeforeK(Node *head, int k, int data)
 {
     Node *newNode = new Node(data);
     if (head->data == k)
     {
-        return insertAt_First(data, head);
+        return insertAt_First(head, data);
     }
     else
     {
@@ -182,25 +190,33 @@ Node *insertBeforeK(Node *head, int k, int data)
         while (temp->next->data != k)
         {
             temp = temp->next;
+            if (!temp->next)
+                return head;
         }
         newNode->next = temp->next;
         temp->next = newNode;
+        temp->next->prev = temp;
+        temp = temp->next;
+        temp->next->prev = temp;
     }
     return head;
 }
 
-/* ------------------------------------------------------------------------- */
+/* ---------------------------------------------------- */
 
 Node *deleteAt_First(Node *head)
 {
+    if (head == NULL)
+        return head;
     Node *temp = head;
     head = temp->next;
     temp->next = NULL;
+    head->prev = NULL;
     delete temp;
     return head;
 }
 
-/* ------------------------------------------------ */
+/* ---------------------------------------------------- */
 
 Node *deleteAt_Last(Node *head)
 {
@@ -215,7 +231,7 @@ Node *deleteAt_Last(Node *head)
     return head;
 }
 
-/* ------------------------------------------------ */
+/* ---------------------------------------------------- */
 
 Node *deleteKth_Element(Node *head, int k)
 {
@@ -237,12 +253,14 @@ Node *deleteKth_Element(Node *head, int k)
         }
         Node *d = temp->next;
         temp->next = d->next;
+        temp->next->prev = temp;
+        d->next = d->prev = NULL;
         delete d;
     }
     return head;
 }
 
-/* ------------------------------------------------ */
+/* ---------------------------------------------------- */
 
 Node *deleteK(Node *head, int k)
 {
@@ -256,15 +274,21 @@ Node *deleteK(Node *head, int k)
         while (temp->next->data != k)
         {
             temp = temp->next;
+            if (!temp->next)
+            {
+                return head;
+            }
         }
         Node *d = temp->next;
         temp->next = d->next;
+        temp->next->prev = temp;
+        d->next = d->prev = NULL;
         delete d;
     }
     return head;
 }
 
-/* ------------------------------------------------ */
+/* ---------------------------------------------------- */
 
 Node *deleteBeforeK(Node *head, int k)
 {
@@ -278,15 +302,21 @@ Node *deleteBeforeK(Node *head, int k)
         while (temp->next->next->data != k)
         {
             temp = temp->next;
+            if (!temp->next)
+            {
+                return head;
+            }
         }
         Node *d = temp->next;
         temp->next = d->next;
+        temp->next->prev = temp;
+        d->next = d->prev = NULL;
         delete d;
     }
     return head;
 }
 
-/* ------------------------------------------------ */
+/* ---------------------------------------------------- */
 
 Node *deleteAfterK(Node *head, int k)
 {
@@ -305,6 +335,8 @@ Node *deleteAfterK(Node *head, int k)
         {
             Node *d = temp->next;
             temp->next = d->next;
+            temp->next->prev = temp;
+            d->next = d->prev = NULL;
             delete d;
         }
         else
@@ -314,80 +346,39 @@ Node *deleteAfterK(Node *head, int k)
     }
     return head;
 }
-/* ------------------------------------------------ */
 
-Node *convertArrToSLL(vector<int> arr)
-{
-    Node *head = new Node(arr[0]);
-    Node *temp = head;
-    for (int i = 1; i < arr.size(); i++)
-    {
-        Node *newNode = new Node(arr[i]);
-        temp->next = newNode;
-        temp = temp->next;
-    }
-    return head;
-}
-/* ------------------------------------------------ */
+/* ---------------------------------------------------- */
 
 int main()
 {
     Node *head = NULL;
-    head = insertAt_First(1, head);
-    head = insertAt_First(2, head);
-    head = insertAt_First(3, head);
-    head = insertAt_Last(4, head);
-    head = insertAt_Last(5, head);
-    head = insertAt_Last(6, head);
-    head = insertKth_Element(7, head, 1);
-    head = insertKth_Element(8, head, 2);
-    head = insertKth_Element(9, head, 8);
-    head = insertKth_Element(10, head, 10);
-    head = insertAt_Mid(100, head);
-    head = insertAt_Mid(200, head);
-    head = insertAfterK(head, 7, 1000);
-    head = insertBeforeK(head, 7, 1000);
-    cout
-        << endl
-        << "After Insert Operations " << endl
-        << endl;
+    head = insertAt_First(head, 10);
+    head = insertAt_First(head, 20);
 
-    PrintLL(head);
+    head = insertAt_Last(head, 40);
+    head = insertAt_Last(head, 30);
+
+    head = insertKth_Element(head, 1, 1);
+
+    head = insertAt_Mid(head, 100);
+    head = insertAt_Mid(head, 200);
+
+    head = insertAfterK(head, 100, 2);
+
+    head = insertBeforeK(head, 30, 3000);
 
     head = deleteAt_First(head);
+
     head = deleteAt_Last(head);
-    head = deleteKth_Element(head, 5);
-    head = deleteKth_Element(head, 2);
-    head = deleteKth_Element(head, 7);
-    head = deleteK(head, 8);
-    head = deleteK(head, 6);
-    head = deleteK(head, 7);
-    head = deleteAfterK(head, 3);
-    head = deleteAfterK(head, 9);
-    head = deleteBeforeK(head, 3);
-    head = deleteBeforeK(head, 5);
-    cout
-        << endl
-        << "After delete Operations " << endl
-        << endl;
 
-    PrintLL(head);
+    head = deleteKth_Element(head, 4);
 
-    cout
-        << endl
-        << "Array -> DLL " << endl
-        << endl;
-    int n;
-    cout << "Enter the size of array:" << endl;
-    cin >> n;
-    vector<int> arr(n);
+    head = deleteK(head, 20000);
 
-    cout << "Enter the " << n << " Array elements:" << endl;
-    for (int i = 0; i < n; i++)
-    {
-        cin >> arr[i];
-    }
-    head = convertArrToSLL(arr);
+    head = deleteBeforeK(head, 20);
+
+    head = deleteAfterK(head, 100);
+
     PrintLL(head);
     return 0;
 }
