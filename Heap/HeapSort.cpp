@@ -1,4 +1,6 @@
 #include <iostream>
+#include <vector>
+#include <queue>
 using namespace std;
 void Heapify(int arr[], int index, int size)
 {
@@ -88,5 +90,7 @@ int main()
     sortArray(arr, 10);
     cout << "After Heap Sort" << endl;
     printHeap(arr, 10);
+    // priority_queue<int> maxHeap;
+    // priority_queue<int, vector<int>, greater<int>> minHeap;
     return 0;
 }
