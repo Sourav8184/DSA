@@ -114,6 +114,29 @@ int maxValue(Node *root)
     return temp->data;
 }
 
+int searchValue(Node *root, int value)
+{
+    if (root == NULL)
+    {
+        return -1;
+    }
+
+    if (root->data == value)
+    {
+        return root->data;
+    }
+
+    if (root->data < value)
+    {
+        return searchValue(root->right, value);
+    }
+    else
+    {
+        return searchValue(root->left, value);
+    }
+    return -1;
+}
+
 int main()
 {
     Node *root = NULL;
@@ -133,6 +156,9 @@ int main()
     cout << endl;
     cout << "Max Value" << endl;
     cout << maxValue(root);
+    cout << endl;
+    cout << "Value is" << endl;
+    cout << searchValue(root, 11);
     cout << endl;
 
     return 0;
