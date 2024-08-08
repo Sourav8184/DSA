@@ -24,7 +24,8 @@ void Heapify(int arr[], int index, int size)
             arr[large] = arr[index];
             arr[index] = temp;
         }
-        if (index - 1 < 0)
+        // if (index - 1 < 0)
+        if (index - 1 == 0)
             break;
         index = (index - 1) / 2;
     }
