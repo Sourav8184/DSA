@@ -84,6 +84,36 @@ void postorderTraversal(Node *root)
     cout << root->data << " ";
 }
 
+// Function for Find minimum value of the BST
+int minValue(Node *root)
+{
+    Node *temp = root;
+    if (temp == NULL)
+    {
+        return -1;
+    }
+    while (temp->left != NULL)
+    {
+        temp = temp->left;
+    }
+    return temp->data;
+}
+
+// Function for Find maximum value of the BST
+int maxValue(Node *root)
+{
+    Node *temp = root;
+    if (temp == NULL)
+    {
+        return -1;
+    }
+    while (temp->right != NULL)
+    {
+        temp = temp->right;
+    }
+    return temp->data;
+}
+
 int main()
 {
     Node *root = NULL;
@@ -98,6 +128,11 @@ int main()
     cout << "post-order Traversal: ";
     postorderTraversal(root);
     cout << endl;
+    cout << "Min Value" << endl;
+    cout << minValue(root);
+    cout << endl;
+    cout << "Max Value" << endl;
+    cout << maxValue(root);
     cout << endl;
 
     return 0;
