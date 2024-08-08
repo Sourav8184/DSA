@@ -60,14 +60,44 @@ void inorderTraversal(Node *root)
     inorderTraversal(root->right);
 }
 
+// Function for in-order traversal of the BST
+void preorderTraversal(Node *root)
+{
+    if (root == NULL)
+    {
+        return;
+    }
+    cout << root->data << " ";
+    inorderTraversal(root->left);
+    inorderTraversal(root->right);
+}
+
+// Function for in-order traversal of the BST
+void postorderTraversal(Node *root)
+{
+    if (root == NULL)
+    {
+        return;
+    }
+    inorderTraversal(root->left);
+    inorderTraversal(root->right);
+    cout << root->data << " ";
+}
+
 int main()
 {
     Node *root = NULL;
     cout << "Input: " << endl;
     root = takeInput(root);
-
     cout << "In-order Traversal: ";
     inorderTraversal(root);
+    cout << endl;
+    cout << "pre-order Traversal: ";
+    preorderTraversal(root);
+    cout << endl;
+    cout << "post-order Traversal: ";
+    postorderTraversal(root);
+    cout << endl;
     cout << endl;
 
     return 0;
