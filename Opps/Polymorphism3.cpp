@@ -45,7 +45,6 @@ public:
 int main()
 {
     Animal *animalPtr;
-
     Dog dog;
     Cat cat;
 
@@ -54,6 +53,11 @@ int main()
 
     animalPtr = &cat;
     animalPtr->sound(); // Outputs: The cat meows.
+
+    Animal obj;
+    Animal *obj2 = new Animal();
+    obj.sound();
+    obj2->sound();
 
     return 0;
 }
