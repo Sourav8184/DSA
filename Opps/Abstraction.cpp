@@ -47,3 +47,42 @@ Explanation:
     The user interacts with the car at a high level through simple methods
     like startEngine, accelerate, and brake.
 */
+
+/* ------------------------------------------------------------------------- */
+
+#include <iostream>
+using namespace std;
+
+class CoffeeMachine
+{
+public:
+    void makeCoffee()
+    {
+        heatWater();
+        brewCoffee();
+        pourCoffee();
+    }
+
+private:
+    void heatWater()
+    {
+        cout << "Heating water..." << endl;
+    }
+
+    void brewCoffee()
+    {
+        cout << "Brewing coffee..." << endl;
+    }
+
+    void pourCoffee()
+    {
+        cout << "Pouring coffee..." << endl;
+    }
+};
+
+int main()
+{
+    CoffeeMachine machine;
+    machine.makeCoffee(); // Simplified interface
+    return 0;
+}
