@@ -17,7 +17,7 @@ public:
 
     void deposit(int amount)
     {
-        if (amount > 0)
+        if (balance >= 0 && amount > 0)
         {
             balance += amount;
             cout << amount << " rs. credited in your account & acc_no is: " << acc_no << "Total balance is: " << balance << endl;
