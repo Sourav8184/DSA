@@ -34,6 +34,10 @@ void testException(int num)
     {
         cout << "Exception: Number out of range" << e.what() << endl;
     }
+    catch (...)
+    {
+        cout << "Exception occur:" << endl;
+    }
 }
 
 int main()
@@ -41,6 +45,7 @@ int main()
     testException(0);
     testException(-5);
     testException(15);
+    testException(5);
     testException(5);
 
     return 0;
