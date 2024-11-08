@@ -365,6 +365,38 @@ void pattern17(int r, int c)
     }
 }
 
+void pattern18(int n)
+{
+    for (int i = 0; i < (n * 2) - 1; i++)
+    {
+        for (int j = 0; j < (n * 2) - 1; j++)
+        {
+            int top = i;
+            int left = j;
+            int bottom = ((2 * n) - 2) - i;
+            int right = ((2 * n) - 2) - j;
+            cout << (n - min(min(top, bottom), min(left, right))) << " ";
+        }
+        cout << endl;
+    }
+}
+
+void pattern19(int n)
+{
+    for (int i = 0; i < (n * 2) - 1; i++)
+    {
+        for (int j = 0; j < (n * 2) - 1; j++)
+        {
+            int top = i;
+            int left = j;
+            int bottom = ((2 * n) - 2) - i;
+            int right = ((2 * n) - 2) - j;
+            cout << min(min(top, bottom), min(left, right)) << " ";
+        }
+        cout << endl;
+    }
+}
+
 int main()
 {
     int row, col;
@@ -373,7 +405,8 @@ int main()
     cout << "Enter How many Cols:" << endl;
     cin >> col;
     cout << endl;
-    pattern17(row, col);
+    // pattern17(row, col);
+    pattern18(row);
     return 0;
     // pattern6(); default parameter
 }
